@@ -4,17 +4,19 @@ from internet_layer import handle_3_layer
 
 
 MY_IFACE = 'Intel(R) Wireless-AC 9560 160MHz'
+MY_MAC = 'ab:cd:ef:12:34:56'
+MY_IP = '10.100.102.200'
 
 
-def handle_packet(pkt):
+def handle_packet(pkt, socket):
     """
     Handles a packet.
     :param pkt: The packet in a bytes array format.
     """
-    type_code = handle_2_layer(pkt, IFACES.dev_from_name(MY_IFACE).mac)
+    type_code = handle_2_layer(pkt, MY_MAC)
     if type_code == -1:
         return
-    handle_3_layer(pkt, type_code) 
+    handle_3_layer(pkt, type_code, MY_MAC, MY_IP, socket) 
 
 
 if __name__ == '__main__':
@@ -24,4 +26,4 @@ if __name__ == '__main__':
         pkt = socket.recv_raw()[1]
         if not pkt:
             continue
-        handle_packet(pkt)
+        handle_packet(pkt, socket)
