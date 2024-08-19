@@ -29,10 +29,10 @@ def build_arp_response(src_mac, src_ip, dst_mac, dst_ip):
 
 def handle_arp(pkt, my_mac, my_ip):
     opcode = int.from_bytes(pkt[OPCODE_START:OPCODE_STOP])
+    src_mac = get_mac_from_bytes(pkt, SRC_MAC_START, SRC_MAC_STOP)
+    src_ip = get_ip_from_bytes(pkt, SRC_IP_START, SRC_IP_STOP)
+    MAC_ADDRESS_TABLE[src_ip] = src_mac
     if opcode == REQUEST_OPCODE:
-        src_mac = get_mac_from_bytes(pkt, SRC_MAC_START, SRC_MAC_STOP)
-        src_ip = get_ip_from_bytes(pkt, SRC_IP_START, SRC_IP_STOP)
-        MAC_ADDRESS_TABLE[src_ip] = src_mac
         dst_ip = get_ip_from_bytes(pkt, DST_IP_START, DST_IP_STOP)
         if dst_ip != my_ip:
             return None, None
